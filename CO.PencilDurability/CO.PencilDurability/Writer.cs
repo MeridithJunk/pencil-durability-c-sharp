@@ -6,10 +6,16 @@ namespace CO.PencilDurability
 {
     public class Writer
     {
+        public string _writeText; 
+        public Writer(string writeText)
+        {
+
+            _writeText = writeText; 
+        }
         public string Write(string text)
         {
 
-            return text;
+            return _writeText += text;
         }
     }
 }
