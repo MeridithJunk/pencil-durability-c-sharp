@@ -159,15 +159,19 @@ namespace PencilDurabilityTests
         //space.For instance, if the paper contains the text "An       a day keeps the doctor away", a pencil can can be instructed to write the word "onion"
         //in the white space gap, so the text reads "An onion a day keeps the doctor away".
         [Test]
-        public void ShouldBeAbleToEdit()
+        [TestCase("onion", "An       a day keeps the doctor away", "An onion a day keeps the doctor away")]
+        public void ShouldBeAbleToEdit(string addword, string text, string ExpectedResult)
+        {
+            Assert.AreEqual(ExpectedResult, _writer.EditText(text, addword));
+        }
+        //Existing text on the page cannot 'shift' to make room for new text.If the new text is longer than the allocated whitespace and thus would collide with other 
+        //existing non-whitespace characters on the page, these character collisions should be represented by the "@" character.For example, writing "artichoke" in 
+        //the middle of "An       a day keeps the doctor away" would result in "An artich@k@ay keeps the doctor away".
+        [Test]
+        public void WhenTextOverlapsFromEditingLettersAreReplacedWithATsign()
         {
 
-            var final = "An onion a day keeps the doctor away";
-
-            Assert.AreEqual(final, _writer.EditText(text, addword));
-
-
+            Assert.AreEqual("An artich@k@ay keeps the doctor away", _writer.replaceinText());
         }
-
     }
 }

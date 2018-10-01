@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CO.PencilDurability
@@ -106,6 +107,35 @@ namespace CO.PencilDurability
             return text.Remove(indexinText, RemoveSpaces.Length).Insert(indexinText, ' ' + editedWord + ' ');
         }
 
+        public string replaceinText()
+        {
+
+            var text = "An       a day keeps the doctor away";
+            var addword = "artichoke";
+            int index = 3;
+            var textArray = text.ToArray();
+            int num = 0;
+
+            for (int i = index; i < addword.Length + 3; i++)
+            {
+                var character = textArray[i].ToString();
+
+                if (String.IsNullOrWhiteSpace(character))
+                {
+
+                    var firstcharacter = addword.ToArray();
+                    textArray[i] = firstcharacter[num];
+                    num++;
+                }
+                else
+                {
+
+                    textArray[i] = '@';
+                    num++;
+                }
+            }
+            return string.Concat(textArray);
+        }
     }
 
 
