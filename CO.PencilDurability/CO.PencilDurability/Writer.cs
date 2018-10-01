@@ -68,8 +68,16 @@ namespace CO.PencilDurability
 
         public void SharpenPencil()
         {
-            _pencil.Length--; 
-            _pencil.Durability = 40000; 
+            if (_pencil.Length > 0)
+            {
+                _pencil.Length--;
+                _pencil.Durability = 40000;
+            }
+            else{
+                _pencil.Durability = 0;
+
+            }
+
         }
 
         
