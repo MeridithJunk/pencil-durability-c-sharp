@@ -17,5 +17,21 @@ namespace CO.PencilDurability
 
             return _writeText += text;
         }
+
+        public Pencil CreatePencil()
+        {
+            Pencil NewPencil = new Pencil();
+            NewPencil.Durability = 100;
+            return NewPencil; 
+
+        }
+
+        
+    }
+
+    public class Pencil
+    {
+        public int Durability { get; set; }
+
     }
 }

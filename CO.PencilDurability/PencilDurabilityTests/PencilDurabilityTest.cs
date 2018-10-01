@@ -29,6 +29,22 @@ namespace PencilDurabilityTests
 
         }
 
+        //When a pencil is created, it can be provided with a value for point durability. 
+        //The pencil will be able to write only a limited number of characters before it goes dull. 
+        //After it goes dull, every character it is directed to write will appear as a space. 
+        //A pencil created with a high point durability will still go dull, but not as fast as one with a 
+        //lower durability rating.
+        [Test]
+        public void PencilShouldReduceDurabilityWhenWriting()
+        {
+            Pencil NewPencil = _writer.CreatePencil(); 
 
-    }
+
+           Assert.AreEqual(100, NewPencil.Durability);
+
+
+        }
+
+
+}
 }
