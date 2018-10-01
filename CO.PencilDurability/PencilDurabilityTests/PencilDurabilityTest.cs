@@ -112,8 +112,6 @@ namespace PencilDurabilityTests
             _writer.SharpenPencil();
             _writer.SharpenPencil();
             Assert.AreEqual(0, _pencil.Durability);
-
-
         }
 
 
