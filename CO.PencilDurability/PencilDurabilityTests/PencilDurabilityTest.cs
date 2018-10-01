@@ -120,8 +120,17 @@ namespace PencilDurabilityTests
         [TestCase("How Much wood would a woodchuck chuck if a woodchuck could chuck wood?", "chuck")]
         public void ShouldEraseLastOccuranceOfWordFromString(string text, string erase)
         {
+            _pencil = new Pencil
+            {
+                Durability = 10,
+                TextWritten = Text,
+                Length = 3,
+                Eraser = 5
 
-            Assert.AreEqual("How Much wood would a woodchuck chuck if a woodchuck could chu   wood?", _writer.EraseWordFromText(text, erase));
+            };
+            _writer = new Writer(Text, _pencil);
+
+            Assert.AreEqual("How Much wood would a woodchuck chuck if a woodchuck could       wood?", _writer.EraseWordFromText(text, erase));
         }
 
         //To do: 
@@ -136,6 +145,29 @@ namespace PencilDurabilityTests
             var erase = "sells";
             _writer.EraseWordFromText(Text, erase);
               Assert.AreEqual(0, _pencil.Eraser);
+        }
+        
+        [Test]
+        public void EraserShouldOnlyEraseAsMuchAsItsCapableOfErasing()
+        {
+            var erase = "sells";
+            Assert.AreEqual("She sel   sea shells ", _writer.EraseWordFromText(Text, erase));
+
+        }
+
+        //Once text has been erased from the paper, a pencil may be instructed to write new text over the resulting white 
+        //space.For instance, if the paper contains the text "An       a day keeps the doctor away", a pencil can can be instructed to write the word "onion"
+        //in the white space gap, so the text reads "An onion a day keeps the doctor away".
+        [Test]
+        public void ShouldBeAbleToEdit()
+        {
+            var text = "An       a day keeps the doctor away";
+            var addword = "onion";
+            var final = "An onion a day keeps the doctor away";
+
+            Assert.AreEqual(final, _writer.EditText());
+
+
         }
 
     }
