@@ -18,6 +18,12 @@ namespace CO.PencilDurability
             return _writeText += text;
         }
 
+        public string AppendWritingBasedOnPencilDurability(string text, int durability)
+        {
+           return text.Substring(0, durability);
+
+        }
+
         public Pencil CreatePencil()
         {
             Pencil NewPencil = new Pencil();

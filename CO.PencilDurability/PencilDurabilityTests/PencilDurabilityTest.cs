@@ -37,10 +37,7 @@ namespace PencilDurabilityTests
         [Test]
         public void PencilShouldReduceDurabilityWhenWriting()
         {
-            Pencil NewPencil = _writer.CreatePencil(); 
-
-
-           Assert.AreEqual(100, NewPencil.Durability);
+           Assert.AreEqual("He", _writer.AppendWritingBasedOnPencilDurability("Hello", 2));
 
 
         }
