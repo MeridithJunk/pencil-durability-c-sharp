@@ -116,10 +116,10 @@ namespace PencilDurabilityTests
 
         //When the pencil is instructed to erase text from the paper, the last occurrence of that text on the paper will be replaced with empty spaces.
         [Test]
-        public void ShouldEraseLastOccuranceOfWordFromString()
+        [TestCase("How Much wood would a woodchuck chuck if a woodchuck could chuck wood?", "chuck")]
+        public void ShouldEraseLastOccuranceOfWordFromString(string text, string erase)
         {
-            Assert.AreEqual("How Much wood would a woodchuck chuck if a woodchuck could  wood?", _writer.EraseWordFromText());
-
+            Assert.AreEqual("How Much wood would a woodchuck chuck if a woodchuck could       wood?", _writer.EraseWordFromText(text, erase));
         }
 
 

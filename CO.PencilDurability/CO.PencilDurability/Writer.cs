@@ -80,17 +80,10 @@ namespace CO.PencilDurability
 
         }
 
-        public string EraseWordFromText()
+        public string EraseWordFromText(string text, string erase)
         {
-            string text = "How Much wood would a woodchuck chuck if a woodchuck could chuck wood?";
-            string erase = "chuck";
             var indexinText = text.LastIndexOf(erase);
-
-
-            return text.Remove(indexinText, erase.Length);
-
-
-
+            return text.Remove(indexinText, erase.Length).Insert(indexinText, new String(' ', erase.Length)); 
         }
 
     }
