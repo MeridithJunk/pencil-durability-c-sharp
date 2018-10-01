@@ -120,7 +120,8 @@ namespace PencilDurabilityTests
         [TestCase("How Much wood would a woodchuck chuck if a woodchuck could chuck wood?", "chuck")]
         public void ShouldEraseLastOccuranceOfWordFromString(string text, string erase)
         {
-            Assert.AreEqual("How Much wood would a woodchuck chuck if a woodchuck could       wood?", _writer.EraseWordFromText(text, erase));
+
+            Assert.AreEqual("How Much wood would a woodchuck chuck if a woodchuck could chu   wood?", _writer.EraseWordFromText(text, erase));
         }
 
         //To do: 
@@ -134,10 +135,7 @@ namespace PencilDurabilityTests
         {
             var erase = "sells";
             _writer.EraseWordFromText(Text, erase);
-           
-              Assert.AreEqual(-3, _pencil.Eraser);
-
-
+              Assert.AreEqual(0, _pencil.Eraser);
         }
 
     }
