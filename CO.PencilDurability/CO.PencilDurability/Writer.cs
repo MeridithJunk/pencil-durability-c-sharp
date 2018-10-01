@@ -6,11 +6,13 @@ namespace CO.PencilDurability
 {
     public class Writer
     {
-        public string _writeText; 
-        public Writer(string writeText)
+        public string _writeText;
+        public Pencil _pencil; 
+        public Writer(string writeText, Pencil pencil)
         {
+            _writeText = writeText;
+            _pencil = pencil;
 
-            _writeText = writeText; 
         }
         public string Write(string text)
         {
@@ -61,6 +63,11 @@ namespace CO.PencilDurability
             NewPencil.Durability = 100;
             return NewPencil; 
 
+        }
+
+        public void SharpenPencil()
+        {
+            _pencil.Durability = 30000; 
         }
 
         

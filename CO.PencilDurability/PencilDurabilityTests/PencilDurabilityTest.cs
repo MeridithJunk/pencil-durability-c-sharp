@@ -8,13 +8,19 @@ namespace PencilDurabilityTests
     public class PencilDurabilityTest
     {
         private Writer _writer;
+        private Pencil _pencil; 
         private string Text = "She sells sea shells ";
 
         [SetUp]
         public void SetUp()
         {
+            _pencil = new Pencil
+            {
+                Durability = 10,
+                textWritten = Text
 
-            _writer = new Writer(Text); 
+        }; 
+            _writer = new Writer(Text, _pencil); 
         }
 
         //When the pencil is instructed to write a string of text on a sheet of paper,
@@ -75,6 +81,19 @@ namespace PencilDurabilityTests
             pencil = _writer.AppendWritingBasedOnPencilDurability("Hello There", pencil);
             Assert.AreEqual("He         ", pencil.textWritten);
         }
+
+        //when a pencil is sharpened, it regains its initial point durability and can write more characters before
+        //it goes dull again.thus, given a pencil created with point durability of 40,000 that has since degraded, 
+        //when it is sharpened, its point durability will be 40,000 again.
+        [Test]
+        public void PencilShouldBeSharpened()
+        {
+            //30000
+            _writer.SharpenPencil(); 
+            Assert.AreEqual(30000, _pencil.Durability);
+        }
+
+
 
 
 
