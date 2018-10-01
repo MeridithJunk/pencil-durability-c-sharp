@@ -99,15 +99,11 @@ namespace CO.PencilDurability
             }
         }
 
-        public string EditText()
+        public string EditText(string text, string editedWord)
         {
-            var text = "An       a day keeps the doctor away";
-            var addword = "onion";
-            var RemoveSpaces = new String(' ', addword.Length + 2);
-
+            var RemoveSpaces = new String(' ', editedWord.Length + 2);
             var indexinText = text.LastIndexOf(RemoveSpaces);
-
-            return text.Remove(indexinText, RemoveSpaces.Length).Insert(indexinText, ' ' + addword + ' ');
+            return text.Remove(indexinText, RemoveSpaces.Length).Insert(indexinText, ' ' + editedWord + ' ');
         }
 
     }

@@ -161,11 +161,10 @@ namespace PencilDurabilityTests
         [Test]
         public void ShouldBeAbleToEdit()
         {
-            var text = "An       a day keeps the doctor away";
-            var addword = "onion";
+
             var final = "An onion a day keeps the doctor away";
 
-            Assert.AreEqual(final, _writer.EditText());
+            Assert.AreEqual(final, _writer.EditText(text, addword));
 
 
         }
