@@ -9,5 +9,6 @@ namespace CO.PencilDurability
         public int Durability { get; set; }
         public string TextWritten { get; set; }
         public int Length { get; set; }
+        public int Eraser { get; set; }
     }
 }

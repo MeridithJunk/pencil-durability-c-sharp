@@ -83,6 +83,8 @@ namespace CO.PencilDurability
         public string EraseWordFromText(string text, string erase)
         {
             var indexinText = text.LastIndexOf(erase);
+            var erasedLength = erase.Length; 
+            _pencil.Eraser = _pencil.Eraser - erasedLength; 
             return text.Remove(indexinText, erase.Length).Insert(indexinText, new String(' ', erase.Length)); 
         }
 

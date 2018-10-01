@@ -18,7 +18,8 @@ namespace PencilDurabilityTests
             {
                 Durability = 10,
                 TextWritten = Text,
-                Length = 3
+                Length = 3, 
+                Eraser = 2
 
         }; 
             _writer = new Writer(Text, _pencil); 
@@ -122,9 +123,22 @@ namespace PencilDurabilityTests
             Assert.AreEqual("How Much wood would a woodchuck chuck if a woodchuck could       wood?", _writer.EraseWordFromText(text, erase));
         }
 
+        //To do: 
+        //and if the string "chuck" is erased again, the paper should read:
+        //"How much wood would a woodchuck chuck if a wood      could       wood?"
+
+        // When a pencil is created, it can be provided with a value for eraser durability.For simplicity, all characters except
+        // for white space should degrade the eraser by a value of one.Text should be erased in the opposite order it was written. Once the eraser durability is zero, the eraser is worn out and can no longer erase.
+        [Test]
+        public void ShouldDegradeEraserAsItDegrades()
+        {
+            var erase = "sells";
+            _writer.EraseWordFromText(Text, erase);
+           
+              Assert.AreEqual(-3, _pencil.Eraser);
 
 
-
+        }
 
     }
 }
