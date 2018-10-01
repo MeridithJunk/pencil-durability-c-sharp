@@ -18,7 +18,7 @@ namespace CO.PencilDurability
             return _writeText += text;
         }
 
-        public string AppendWritingBasedOnPencilDurability(string text, Pencil Pencil)
+        public Pencil AppendWritingBasedOnPencilDurability(string text, Pencil Pencil)
         {
             StringBuilder WrittenText = new StringBuilder();
             var CleanTextArray = text.ToCharArray();
@@ -42,9 +42,9 @@ namespace CO.PencilDurability
                 }
 
             }
-
+            pencil.textWritten = WrittenText.ToString();
             pencil.Durability = Pencil.Durability;
-            return WrittenText.ToString();
+            return pencil;
 
         }
 

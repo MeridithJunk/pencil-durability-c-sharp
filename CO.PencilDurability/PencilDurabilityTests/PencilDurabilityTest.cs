@@ -40,11 +40,29 @@ namespace PencilDurabilityTests
             Pencil pencil = new Pencil()
             {
                 Durability = 3
-            }; 
-           Assert.AreEqual("He", _writer.AppendWritingBasedOnPencilDurability("Hello", pencil));
+            };
+            pencil = _writer.AppendWritingBasedOnPencilDurability("Hello", pencil);
+
+            Assert.AreEqual(pencil.textWritten, pencil.textWritten);
+
+        }
+
+        //lowercase letters should degrade the pencil point by a value of one, and capital letters should degrade the point by two.hence when a pencil with a point durability 
+        //of four is instructed to write the string "text", the paper will contain the entire string. but if a pencil with point durability of four is instructed to write the 
+        //string "text", the paper will only show "tex ".
+        [Test]
+        public void PencilShouldReduceDurabilityWhenWriting()
+        {
+            Pencil pencil = new Pencil()
+            {
+                Durability = 3
+            };
+
+            pencil = _writer.AppendWritingBasedOnPencilDurability("Hello", pencil); 
+            Assert.AreEqual(0, pencil.Durability);
 
         }
 
 
-}
+    }
 }
