@@ -17,7 +17,8 @@ namespace PencilDurabilityTests
             _pencil = new Pencil
             {
                 Durability = 10,
-                textWritten = Text
+                TextWritten = Text,
+                Length = 3
 
         }; 
             _writer = new Writer(Text, _pencil); 
@@ -49,7 +50,7 @@ namespace PencilDurabilityTests
             };
             pencil = _writer.AppendWritingBasedOnPencilDurability("Hello", pencil);
 
-            Assert.AreEqual(pencil.textWritten, pencil.textWritten);
+            Assert.AreEqual(pencil.TextWritten, pencil.TextWritten);
 
         }
 
@@ -79,7 +80,7 @@ namespace PencilDurabilityTests
             };
 
             pencil = _writer.AppendWritingBasedOnPencilDurability("Hello There", pencil);
-            Assert.AreEqual("He         ", pencil.textWritten);
+            Assert.AreEqual("He         ", pencil.TextWritten);
         }
 
         //when a pencil is sharpened, it regains its initial point durability and can write more characters before
@@ -90,8 +91,19 @@ namespace PencilDurabilityTests
         {
             //30000
             _writer.SharpenPencil(); 
-            Assert.AreEqual(30000, _pencil.Durability);
+            Assert.AreEqual(40000, _pencil.Durability);
         }
+
+        //Pencil Length should decrease everytime Pencil is resharpened
+        [Test]
+        public void  ShouldDecreaseLengthEverytimePencilIsSharpened()
+        {
+            _writer.SharpenPencil();
+            Assert.AreEqual(2, _pencil.Length);
+
+        }
+        //A pencil should also be created with an initial length value.Pencils of short lengthwill only be sharpenable a small number of times while 
+        //pencils of longer length can be sharpened more times.The pencil's length is reduced by one each time it is sharpened. When a pencil's length is zero, then sharpening it no longer restores its point durabliity.
 
 
 

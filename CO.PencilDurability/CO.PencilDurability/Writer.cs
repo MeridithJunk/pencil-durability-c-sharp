@@ -51,7 +51,7 @@ namespace CO.PencilDurability
 
 
             }
-            pencil.textWritten = WrittenText.ToString();
+            pencil.TextWritten = WrittenText.ToString();
             pencil.Durability = Pencil.Durability;
             return pencil;
 
@@ -61,13 +61,15 @@ namespace CO.PencilDurability
         {
             Pencil NewPencil = new Pencil();
             NewPencil.Durability = 100;
+            NewPencil.Length = 3; 
             return NewPencil; 
 
         }
 
         public void SharpenPencil()
         {
-            _pencil.Durability = 30000; 
+            _pencil.Length--; 
+            _pencil.Durability = 40000; 
         }
 
         
