@@ -168,10 +168,11 @@ namespace PencilDurabilityTests
         //existing non-whitespace characters on the page, these character collisions should be represented by the "@" character.For example, writing "artichoke" in 
         //the middle of "An       a day keeps the doctor away" would result in "An artich@k@ay keeps the doctor away".
         [Test]
-        public void WhenTextOverlapsFromEditingLettersAreReplacedWithATsign()
+        [TestCase()]
+        public void WhenTextOverlapsFromEditingLettersAreReplacedWithATsign(string text, string replacementWord, int index)
         {
 
-            Assert.AreEqual("An artich@k@ay keeps the doctor away", _writer.replaceinText());
+            Assert.AreEqual("An artich@k@ay keeps the doctor away", _writer.replaceinText(text, replacementWord, index));
         }
     }
 }

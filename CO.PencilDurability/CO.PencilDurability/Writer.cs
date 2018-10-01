@@ -8,7 +8,7 @@ namespace CO.PencilDurability
     public class Writer
     {
         public string _writeText;
-        public Pencil _pencil; 
+        public Pencil _pencil;
         public Writer(string writeText, Pencil pencil)
         {
             _writeText = writeText;
@@ -43,7 +43,7 @@ namespace CO.PencilDurability
                     WrittenText.Append(character);
                     Pencil.Durability--;
                 }
-                else if(Pencil.Durability == 0)
+                else if (Pencil.Durability == 0)
                 {
                     WrittenText.Append(" ");
 
@@ -62,8 +62,8 @@ namespace CO.PencilDurability
         {
             Pencil NewPencil = new Pencil();
             NewPencil.Durability = 100;
-            NewPencil.Length = 3; 
-            return NewPencil; 
+            NewPencil.Length = 3;
+            return NewPencil;
 
         }
 
@@ -74,7 +74,8 @@ namespace CO.PencilDurability
                 _pencil.Length--;
                 _pencil.Durability = 40000;
             }
-            else{
+            else
+            {
                 _pencil.Durability = 0;
 
             }
@@ -95,8 +96,8 @@ namespace CO.PencilDurability
                 var AvailableErased = erase.Remove(erase.Length - _pencil.Eraser);
                 var indexinText = text.LastIndexOf(erase);
                 AvailableErased += new String(' ', _pencil.Eraser);
-                _pencil.Eraser = 0; 
-              return  text.Remove(indexinText, erase.Length).Insert(indexinText, AvailableErased);
+                _pencil.Eraser = 0;
+                return text.Remove(indexinText, erase.Length).Insert(indexinText, AvailableErased);
             }
         }
 
@@ -107,31 +108,27 @@ namespace CO.PencilDurability
             return text.Remove(indexinText, RemoveSpaces.Length).Insert(indexinText, ' ' + editedWord + ' ');
         }
 
-        public string replaceinText()
+        public string replaceinText(string text, string replacementWord, int index)
         {
-
-            var text = "An       a day keeps the doctor away";
-            var addword = "artichoke";
-            int index = 3;
             var textArray = text.ToArray();
-            int num = 0;
+            int CountOfCharacters = 0;
 
-            for (int i = index; i < addword.Length + 3; i++)
+            for (int i = index; i < replacementWord.Length + 3; i++)
             {
                 var character = textArray[i].ToString();
 
                 if (String.IsNullOrWhiteSpace(character))
                 {
 
-                    var firstcharacter = addword.ToArray();
-                    textArray[i] = firstcharacter[num];
-                    num++;
+                    var firstcharacter = replacementWord.ToArray();
+                    textArray[i] = firstcharacter[CountOfCharacters];
+                    CountOfCharacters++;
                 }
                 else
                 {
 
                     textArray[i] = '@';
-                    num++;
+                    CountOfCharacters++;
                 }
             }
             return string.Concat(textArray);
