@@ -63,6 +63,20 @@ namespace PencilDurabilityTests
 
         }
 
+        //Writing spaces and newlines expends no graphite, therefore "writing" these characters should not affect the pencil point.
+        [Test]
+        public void WrittenTextShouldMaintainTheSameCharacterCount()
+        {
+            Pencil pencil = new Pencil()
+            {
+                Durability = 3
+            };
+
+            pencil = _writer.AppendWritingBasedOnPencilDurability("Hello There", pencil);
+            Assert.AreEqual("He         ", pencil.textWritten);
+        }
+
+
 
     }
 }

@@ -40,6 +40,13 @@ namespace CO.PencilDurability
                     WrittenText.Append(character);
                     Pencil.Durability--;
                 }
+                else if(Pencil.Durability == 0)
+                {
+                    WrittenText.Append(" ");
+
+
+                }
+
 
             }
             pencil.textWritten = WrittenText.ToString();
