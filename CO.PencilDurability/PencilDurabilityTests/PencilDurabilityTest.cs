@@ -19,7 +19,8 @@ namespace PencilDurabilityTests
                 Durability = 10,
                 TextWritten = Text,
                 Length = 3, 
-                Eraser = 2
+                Eraser = 2,
+                IndexOfLastRemovedWord = 3
 
         }; 
             _writer = new Writer(Text, _pencil); 
@@ -125,7 +126,8 @@ namespace PencilDurabilityTests
                 Durability = 10,
                 TextWritten = Text,
                 Length = 3,
-                Eraser = 5
+                Eraser = 5,
+                IndexOfLastRemovedWord = 3
 
             };
             _writer = new Writer(Text, _pencil);
@@ -162,17 +164,31 @@ namespace PencilDurabilityTests
         [TestCase("onion", "An       a day keeps the doctor away", "An onion a day keeps the doctor away")]
         public void ShouldBeAbleToEdit(string addword, string text, string ExpectedResult)
         {
-            Assert.AreEqual(ExpectedResult, _writer.EditText(text, addword));
+            Assert.AreEqual(ExpectedResult, _writer.EditTextRemoveWord(text, addword));
         }
+
+        [Test]
+        [TestCase("onion", "An       a day keeps the doctor away", "An onion a day keeps the doctor away")]
+        public void ShouldUpdatePencilToBeCorrectLastEditedIndex(string addword, string text, string ExpectedResult)
+        {
+            _writer.EditTextRemoveWord(text, addword);
+            Assert.AreEqual(3, _pencil.IndexOfLastRemovedWord);
+
+
+        }
+
+
         //Existing text on the page cannot 'shift' to make room for new text.If the new text is longer than the allocated whitespace and thus would collide with other 
         //existing non-whitespace characters on the page, these character collisions should be represented by the "@" character.For example, writing "artichoke" in 
         //the middle of "An       a day keeps the doctor away" would result in "An artich@k@ay keeps the doctor away".
         [Test]
-        [TestCase()]
+        [TestCase("An       a day keeps the doctor away", "artichoke", 3)]
         public void WhenTextOverlapsFromEditingLettersAreReplacedWithATsign(string text, string replacementWord, int index)
         {
 
-            Assert.AreEqual("An artich@k@ay keeps the doctor away", _writer.replaceinText(text, replacementWord, index));
+            Assert.AreEqual("An artich@k@ay keeps the doctor away", _writer.replaceinText(text, replacementWord));
         }
+
+        
     }
 }

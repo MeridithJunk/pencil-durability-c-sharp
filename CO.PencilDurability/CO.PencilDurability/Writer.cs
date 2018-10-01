@@ -58,14 +58,7 @@ namespace CO.PencilDurability
 
         }
 
-        public Pencil CreatePencil()
-        {
-            Pencil NewPencil = new Pencil();
-            NewPencil.Durability = 100;
-            NewPencil.Length = 3;
-            return NewPencil;
 
-        }
 
         public void SharpenPencil()
         {
@@ -101,19 +94,29 @@ namespace CO.PencilDurability
             }
         }
 
-        public string EditText(string text, string editedWord)
+        public string EditTextRemoveWord(string text, string editedWord)
         {
             var RemoveSpaces = new String(' ', editedWord.Length + 2);
             var indexinText = text.LastIndexOf(RemoveSpaces);
+            _pencil.IndexOfLastRemovedWord = indexinText + 1; 
             return text.Remove(indexinText, RemoveSpaces.Length).Insert(indexinText, ' ' + editedWord + ' ');
         }
 
-        public string replaceinText(string text, string replacementWord, int index)
+        public Pencil CreatePencil()
+        {
+            Pencil NewPencil = new Pencil();
+            NewPencil.Durability = 100;
+            NewPencil.Length = 3;
+            return NewPencil;
+
+        }
+
+        public string replaceinText(string text, string replacementWord)
         {
             var textArray = text.ToArray();
             int CountOfCharacters = 0;
 
-            for (int i = index; i < replacementWord.Length + 3; i++)
+            for (int i = _pencil.IndexOfLastRemovedWord; i < replacementWord.Length + 3; i++)
             {
                 var character = textArray[i].ToString();
 
