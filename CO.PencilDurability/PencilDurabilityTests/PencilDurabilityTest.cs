@@ -19,7 +19,7 @@ namespace PencilDurabilityTests
                 Durability = 10,
                 TextWritten = Text,
                 Length = 3, 
-                Eraser = 2,
+                Eraser = 100,
                 IndexOfLastRemovedWord = 3
 
         }; 
@@ -118,22 +118,25 @@ namespace PencilDurabilityTests
 
         //When the pencil is instructed to erase text from the paper, the last occurrence of that text on the paper will be replaced with empty spaces.
         [Test]
-        [TestCase("How Much wood would a woodchuck chuck if a woodchuck could chuck wood?", "chuck")]
-        public void ShouldEraseLastOccuranceOfWordFromString(string text, string erase)
+        [TestCase("How Much wood would a woodchuck chuck if a woodchuck could chuck wood?", "chuck", "How Much wood would a woodchuck chuck if a woodchuck could       wood?")]
+        [TestCase("How Much wood would a woodchuck chuck if a woodchuck could       wood?", "chuck", "How Much wood would a woodchuck c     if a woodchuck could       wood?")]
+        public void ShouldEraseLastOccuranceOfWordFromString(string text, string erase, string expectedResult)
         {
             _pencil = new Pencil
             {
                 Durability = 10,
                 TextWritten = Text,
                 Length = 3,
-                Eraser = 5,
+                Eraser = 9,
                 IndexOfLastRemovedWord = 3
 
             };
             _writer = new Writer(Text, _pencil);
 
-            Assert.AreEqual("How Much wood would a woodchuck chuck if a woodchuck could       wood?", _writer.EraseWordFromText(text, erase));
+            Assert.AreEqual(expectedResult, _writer.EraseWordFromText(text, erase));
         }
+
+
 
         //To do: 
         //and if the string "chuck" is erased again, the paper should read:
@@ -173,8 +176,6 @@ namespace PencilDurabilityTests
         {
             _writer.EditTextRemoveWord(text, addword);
             Assert.AreEqual(3, _pencil.IndexOfLastRemovedWord);
-
-
         }
 
 
