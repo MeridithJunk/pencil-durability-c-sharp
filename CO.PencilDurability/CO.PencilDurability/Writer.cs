@@ -29,9 +29,5 @@ namespace CO.PencilDurability
         
     }
 
-    public class Pencil
-    {
-        public int Durability { get; set; }
 
-    }
 }
