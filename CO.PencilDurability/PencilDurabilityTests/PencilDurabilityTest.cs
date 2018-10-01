@@ -35,10 +35,13 @@ namespace PencilDurabilityTests
         //A pencil created with a high point durability will still go dull, but not as fast as one with a 
         //lower durability rating.
         [Test]
-        public void PencilShouldReduceDurabilityWhenWriting()
+        public void PencilShouldAppendTextbasedOnPencilDurability()
         {
-           Assert.AreEqual("He", _writer.AppendWritingBasedOnPencilDurability("Hello", 2));
-
+            Pencil pencil = new Pencil()
+            {
+                Durability = 3
+            }; 
+           Assert.AreEqual("He", _writer.AppendWritingBasedOnPencilDurability("Hello", pencil));
 
         }
 

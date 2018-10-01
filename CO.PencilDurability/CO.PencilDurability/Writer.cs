@@ -18,9 +18,33 @@ namespace CO.PencilDurability
             return _writeText += text;
         }
 
-        public string AppendWritingBasedOnPencilDurability(string text, int durability)
+        public string AppendWritingBasedOnPencilDurability(string text, Pencil Pencil)
         {
-           return text.Substring(0, durability);
+            StringBuilder WrittenText = new StringBuilder();
+            var CleanTextArray = text.ToCharArray();
+            Pencil pencil = new Pencil();
+            foreach (var character in CleanTextArray)
+            {
+                if (char.IsUpper(character) && Pencil.Durability >= 2)
+                {
+                    WrittenText.Append(character);
+                    Pencil.Durability--;
+                    Pencil.Durability--;
+                }
+                else if (Char.IsWhiteSpace(character))
+                {
+                    WrittenText.Append(character);
+                }
+                else if (Pencil.Durability > 0)
+                {
+                    WrittenText.Append(character);
+                    Pencil.Durability--;
+                }
+
+            }
+
+            pencil.Durability = Pencil.Durability;
+            return WrittenText.ToString();
 
         }
 
