@@ -118,18 +118,13 @@ namespace PencilDurabilityTests
 
         //When the pencil is instructed to erase text from the paper, the last occurrence of that text on the paper will be replaced with empty spaces.
         [Test]
-        [TestCase("How Much wood would a woodchuck chuck if a woodchuck could chuck wood?", "chuck", "How Much wood would a woodchuck chuck if a woodchuck could       wood?")]
-        [TestCase("How Much wood would a woodchuck chuck if a woodchuck could       wood?", "chuck", "How Much wood would a woodchuck c     if a woodchuck could       wood?")]
-        public void ShouldEraseLastOccuranceOfWordFromString(string text, string erase, string expectedResult)
+        [TestCase("How Much wood would a woodchuck chuck if a woodchuck could chuck wood?", "chuck", 5, "How Much wood would a woodchuck chuck if a woodchuck could       wood?")]
+        [TestCase("woodchuck chuck if a woodchuck could       wood?", "chuck", 4, "woodchuck c     if a woodchuck could       wood?")]
+        public void ShouldEraseLastOccuranceOfWordFromString(string text, string erase, int EraserDurability, string expectedResult)
         {
             _pencil = new Pencil
             {
-                Durability = 10,
-                TextWritten = Text,
-                Length = 3,
-                Eraser = 9,
-                IndexOfLastRemovedWord = 3
-
+                Eraser = EraserDurability
             };
             _writer = new Writer(Text, _pencil);
 
@@ -147,14 +142,21 @@ namespace PencilDurabilityTests
         [Test]
         public void ShouldDegradeEraserAsItDegrades()
         {
+            int expectedResult = _pencil.Eraser - 5;
             var erase = "sells";
             _writer.EraseWordFromText(Text, erase);
-              Assert.AreEqual(0, _pencil.Eraser);
+            Assert.AreEqual(expectedResult, _pencil.Eraser);
         }
         
         [Test]
         public void EraserShouldOnlyEraseAsMuchAsItsCapableOfErasing()
         {
+            _pencil = new Pencil
+            {
+                Eraser = 2
+
+            };
+            _writer = new Writer(Text, _pencil);
             var erase = "sells";
             Assert.AreEqual("She sel   sea shells ", _writer.EraseWordFromText(Text, erase));
 
@@ -184,10 +186,10 @@ namespace PencilDurabilityTests
         //the middle of "An       a day keeps the doctor away" would result in "An artich@k@ay keeps the doctor away".
         [Test]
         [TestCase("An       a day keeps the doctor away", "artichoke", 3)]
-        public void WhenTextOverlapsFromEditingLettersAreReplacedWithATsign(string text, string replacementWord, int index)
+        public void WhenTextOverlapsFromEditingLettersAreReplacedWithATsign(string text, string replacementWord, int IndexOfLastRemovedWord)
         {
 
-            Assert.AreEqual("An artich@k@ay keeps the doctor away", _writer.replaceinText(text, replacementWord));
+            Assert.AreEqual("An artich@k@ay keeps the doctor away", _writer.ReplaceinText(text, replacementWord, IndexOfLastRemovedWord));
         }
 
         

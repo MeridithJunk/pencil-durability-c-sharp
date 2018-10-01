@@ -21,39 +21,35 @@ namespace CO.PencilDurability
             return _writeText += text;
         }
 
-        public Pencil AppendWritingBasedOnPencilDurability(string text, Pencil Pencil)
+        public Pencil AppendWritingBasedOnPencilDurability(string text, Pencil pencil)
         {
             StringBuilder WrittenText = new StringBuilder();
             var CleanTextArray = text.ToCharArray();
-            Pencil pencil = new Pencil();
             foreach (var character in CleanTextArray)
             {
-                if (char.IsUpper(character) && Pencil.Durability >= 2)
+                if (char.IsUpper(character) && pencil.Durability >= 2)
                 {
                     WrittenText.Append(character);
-                    Pencil.Durability--;
-                    Pencil.Durability--;
+                    pencil.Durability--;
+                    pencil.Durability--;
                 }
                 else if (Char.IsWhiteSpace(character))
                 {
                     WrittenText.Append(character);
                 }
-                else if (Pencil.Durability > 0)
+                else if (pencil.Durability > 0)
                 {
                     WrittenText.Append(character);
-                    Pencil.Durability--;
+                    pencil.Durability--;
                 }
-                else if (Pencil.Durability == 0)
+                else if (pencil.Durability == 0)
                 {
                     WrittenText.Append(" ");
-
-
                 }
-
 
             }
             pencil.TextWritten = WrittenText.ToString();
-            pencil.Durability = Pencil.Durability;
+            pencil.Durability = pencil.Durability;
             return pencil;
 
         }
@@ -75,25 +71,25 @@ namespace CO.PencilDurability
 
         }
 
-        public string EraseWordFromText(string text, string erase)
+        public string EraseWordFromText(string text, string ErasedWord)
         {
-            var erasedLength = erase.Length;
+            var erasedLength = ErasedWord.Length;
+            var indexinText = text.LastIndexOf(" " + ErasedWord + " ");
+
             if (erasedLength <= _pencil.Eraser)
             {
                 _pencil.Eraser = _pencil.Eraser - erasedLength;
-                var indexinText = text.LastIndexOf(" " + erase + " ");
-                return text.Remove(indexinText, erase.Length + 2).Insert(indexinText, new String(' ', erasedLength + 2));
+                return text.Remove(indexinText, ErasedWord.Length + 2).Insert(indexinText, new String(' ', erasedLength + 2));
             }
             else
             {
-                var AvailableErased = erase.Remove(erase.Length - _pencil.Eraser);
-                var indexinText = text.LastIndexOf(" " + erase + " ");
+                var AvailableErased = ErasedWord.Remove(erasedLength - _pencil.Eraser);
                 AvailableErased += new String(' ', _pencil.Eraser);
                 _pencil.Eraser = 0;
-                return text.Remove(indexinText, erase.Length).Insert(indexinText, AvailableErased);
+                return text.Remove(indexinText, erasedLength + 2).Insert(indexinText, ' ' + AvailableErased + ' ');
             }
         }
-
+        //She sells sea shells 
         public string EditTextRemoveWord(string text, string editedWord)
         {
             var RemoveSpaces = new String(' ', editedWord.Length + 2);
@@ -111,12 +107,12 @@ namespace CO.PencilDurability
 
         }
 
-        public string replaceinText(string text, string replacementWord)
+        public string ReplaceinText(string text, string replacementWord, int IndexOfLastRemovedWord)
         {
             var textArray = text.ToArray();
             int CountOfCharacters = 0;
 
-            for (int i = _pencil.IndexOfLastRemovedWord; i < replacementWord.Length + 3; i++)
+            for (int i = IndexOfLastRemovedWord; i < replacementWord.Length + 3; i++)
             {
                 var character = textArray[i].ToString();
 
