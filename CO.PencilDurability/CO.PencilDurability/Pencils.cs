@@ -26,7 +26,8 @@ namespace CO.PencilDurability
             Pencil NewPencil = new Pencil
             {
                 Durability = 30000, //To Do: add to config? 
-                Length = 10 //To Do: add to config? 
+                Length = 10, //To Do: add to config? 
+                Eraser = 10
             };
             return NewPencil;
 

@@ -89,9 +89,12 @@ namespace PencilDurabilityTests
         [Test]
         public void PencilShouldBeSharpened()
         {
-            //30000
+            _pencil =new Pencil {
+               Durability  = 10, 
+               Length = 10
+            };
             _pencils.SharpenPencil(_pencil);
-            Assert.AreEqual(40000, _pencil.Durability);
+            Assert.AreEqual(30000, _pencil.Durability);
         }
 
         //Pencil Length should decrease everytime Pencil is resharpened
@@ -100,13 +103,22 @@ namespace PencilDurabilityTests
         [Test]
         public void ShouldDecreaseLengthEverytimePencilIsSharpened()
         {
+            _pencil = new Pencil()
+            {
+                Durability = 10,
+                Length = 10
+            };
             _pencils.SharpenPencil(_pencil);
             _pencils.SharpenPencil(_pencil);
-            Assert.AreEqual(1, _pencil.Length);
+            Assert.AreEqual(8, _pencil.Length);
         }
 
         public void ShouldNotResetPencilDurabilityAfterPencilLengthIsZero()
         {
+            _pencil = new Pencil()
+            {
+                Durability = 5
+            };
             _pencils.SharpenPencil(_pencil);
             _pencils.SharpenPencil(_pencil);
             _pencils.SharpenPencil(_pencil);
@@ -179,7 +191,6 @@ namespace PencilDurabilityTests
         [TestCase("An       a day keeps the doctor away", "artichoke", 3)]
         public void WhenTextOverlapsFromEditingLettersAreReplacedWithATsign(string text, string replacementWord, int IndexOfLastRemovedWord)
         {
-
             Assert.AreEqual("An artich@k@ay keeps the doctor away", _edit.ReplaceinText(text, replacementWord, IndexOfLastRemovedWord));
         }
 
