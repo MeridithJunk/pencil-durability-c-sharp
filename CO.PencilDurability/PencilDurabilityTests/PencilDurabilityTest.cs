@@ -134,8 +134,8 @@ namespace PencilDurabilityTests
 
         //When the pencil is instructed to erase text from the paper, the last occurrence of that text on the paper will be replaced with empty spaces.
         [Test]
-        [TestCase("How Much wood would a woodchuck chuck if a woodchuck could chuck wood?", "chuck", 5, "How Much wood would a woodchuck chuck if a woodchuck could       wood?")]
-        [TestCase("woodchuck chuck if a woodchuck could       wood?", "chuck", 4, "woodchuck chuck if a woodc     could       wood?")]
+        [TestCase("chuck if a woodchuck could chuck wood?", "chuck", 5, "chuck if a woodchuck could       wood?")]
+        [TestCase("woodchuck chuck if a woodchuck could       wood?", "chuck", 4, "woodchuck c     if a woodchuck could       wood?")]
         [TestCase("She sells Sea shells", "sells", 2, "She sel   Sea shells")]
         public void ShouldEraseLastOccuranceOfWordFromString(string text, string erase, int EraserDurability, string expectedResult)
         {
@@ -183,14 +183,23 @@ namespace PencilDurabilityTests
         //space.For instance, if the paper contains the text "An       a day keeps the doctor away", a pencil can can be instructed to write the word "onion"
         //in the white space gap, so the text reads "An onion a day keeps the doctor away".
         [Test]
-        [TestCase("onion", "An       a day keeps the doctor away", "An onion a day keeps the doctor away")]
-        public void ShouldBeAbleToEdit(string addword, string text, string ExpectedResult)
+        [TestCase("onion", "An       a day keeps the doctor away", "An onion a day keeps the doctor away", 3)]
+        [TestCase("chuck", "woodchuck c     if a woodchuck could       wood?", "woodchuck c     if a woodchuck could chuck wood?", 37)]
+        public void ShouldBeAbleToEdit(string addword, string text, string ExpectedResult, int IndexInText)
         {
+            _pencil = new Pencil
+            {
+                IndexOfLastRemovedWord = IndexInText
+            };
+            _edit = new Edit(_pencil);
+
             Assert.AreEqual(ExpectedResult, _edit.EditTextRemoveWord(text, addword));
         }
 
         [Test]
         [TestCase("onion", "An       a day keeps the doctor away", 3)]
+        [TestCase("chuck", "woodchuck c     if a woodchuck could       wood?", 37)]
+   
         public void ShouldUpdatePencilToBeCorrectLastEditedIndex(string addword, string text, int ExpectedResult)
         {
             _edit.EditTextRemoveWord(text, addword);
@@ -203,6 +212,7 @@ namespace PencilDurabilityTests
         //the middle of "An       a day keeps the doctor away" would result in "An artich@k@ay keeps the doctor away".
         [Test]
         [TestCase("An       a day keeps the doctor away", "artichoke", 3, "An artich@k@ay keeps the doctor away")]
+        [TestCase("woodchuck c     if a woodchuck could       wood?", "Meridith", 37, "woodchuck c     if a woodchuck could Meridi@ood?")]
         public void WhenTextOverlapsFromEditingLettersAreReplacedWithATsign(string text, string replacementWord, int IndexOfLastRemovedWord, string expectedResult)
         {
             _pencil = new Pencil
@@ -210,9 +220,7 @@ namespace PencilDurabilityTests
                 IndexOfLastRemovedWord = IndexOfLastRemovedWord
             };
             _edit = new Edit(_pencil);
-            Assert.AreEqual(expectedResult, _edit.ReplaceinText(text, replacementWord));
+            Assert.AreEqual(expectedResult, _edit.ReplaceinText(text, replacementWord, IndexOfLastRemovedWord));
         }
-
-
     }
 }

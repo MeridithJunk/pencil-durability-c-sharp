@@ -40,26 +40,27 @@ namespace CO.PencilDurability
             return text.Remove(indexinText, RemoveSpaces.Length).Insert(indexinText, ' ' + editedWord + ' ');
         }
 
-        public string ReplaceinText(string text, string replacementWord)
+        public string ReplaceinText(string text, string replacementWord, int IndexOfLastRemovedWord)
         {
             var textArray = text.ToArray();
             int CountOfCharacters = 0;
 
-            for (int i = _pencil.IndexOfLastRemovedWord; i < replacementWord.Length + 3; i++)
+            for (int i = 0; i < replacementWord.Length - 1; i++)
             {
-                var character = textArray[i].ToString();
+                var character = textArray[IndexOfLastRemovedWord].ToString();
 
                 if (String.IsNullOrWhiteSpace(character))
                 {
-
                     var firstcharacter = replacementWord.ToArray();
-                    textArray[i] = firstcharacter[CountOfCharacters];
+                    textArray[IndexOfLastRemovedWord] = firstcharacter[CountOfCharacters];
                     CountOfCharacters++;
+                    IndexOfLastRemovedWord++;
                 }
                 else
                 {
-                    textArray[i] = '@';
+                    textArray[IndexOfLastRemovedWord] = '@';
                     CountOfCharacters++;
+                    IndexOfLastRemovedWord++; 
                 }
             }
             return string.Concat(textArray);
