@@ -1,6 +1,6 @@
 # PencilDurability-Kata
 
-# Hey - This is my code kata for Pillar Technologies. I chose to do the pencil durability code kata. I created a .net core project and wrote #my application in C# 
+ Hi- This is my code kata for Pillar Technologies. I chose to do the pencil durability code kata. I created a .net core project and wrote my application in C# 
 
 # To Run  my tests 
 1. Clone my code from my Git repository: https://github.com/MeridithJunk/PencilDurability-Kata
