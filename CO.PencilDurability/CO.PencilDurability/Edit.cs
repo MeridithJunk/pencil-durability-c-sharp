@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CO.PencilDurability
 {
@@ -40,12 +38,12 @@ namespace CO.PencilDurability
             return text.Remove(indexinText, RemoveSpaces.Length).Insert(indexinText, ' ' + editedWord + ' ');
         }
 
-        public string ReplaceinText(string text, string replacementWord, int IndexOfLastRemovedWord)
+        public string ReplaceinText(string text, string replacementWord)
         {
             var textArray = text.ToArray();
             int CountOfCharacters = 0;
 
-            for (int i = IndexOfLastRemovedWord; i < replacementWord.Length + 3; i++)
+            for (int i = _pencil.IndexOfLastRemovedWord; i < replacementWord.Length + 3; i++)
             {
                 var character = textArray[i].ToString();
 
@@ -58,7 +56,6 @@ namespace CO.PencilDurability
                 }
                 else
                 {
-
                     textArray[i] = '@';
                     CountOfCharacters++;
                 }

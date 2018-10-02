@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace CO.PencilDurability
@@ -9,48 +7,45 @@ namespace CO.PencilDurability
     {
         public string _writeText;
         public Pencil _pencil;
-        public Writer(string writeText, Pencil pencil)
+        public Writer(Pencil pencil)
         {
-            _writeText = writeText;
             _pencil = pencil;
 
         }
         public string Write(string text)
         {
-            return _writeText += text;
+            return _writeText += AppendWritingBasedOnPencilDurability(text);
         }
 
 
         //To do: Maybe split into two methods? 
-        public Pencil AppendWritingBasedOnPencilDurability(string text, Pencil pencil)
+        public string AppendWritingBasedOnPencilDurability(string text)
         {
             StringBuilder WrittenText = new StringBuilder();
             var CleanTextArray = text.ToCharArray();
             foreach (var character in CleanTextArray)
             {
-                if (char.IsUpper(character) && pencil.Durability >= 2)
+                if (char.IsUpper(character) && _pencil.Durability >= 2)
                 {
                     WrittenText.Append(character);
-                    pencil.Durability--;
-                    pencil.Durability--;
+                    _pencil.Durability--;
+                    _pencil.Durability--; //Removing two for capitals
                 }
                 else if (Char.IsWhiteSpace(character))
                 {
                     WrittenText.Append(character);
                 }
-                else if (pencil.Durability > 0)
+                else if (_pencil.Durability > 0)
                 {
                     WrittenText.Append(character);
-                    pencil.Durability--;
+                    _pencil.Durability--; // Removing one for all others 
                 }
-                else if (pencil.Durability == 0)
+                else if (_pencil.Durability == 0)
                 {
                     WrittenText.Append(" ");
                 }
             }
-            pencil.TextWritten = WrittenText.ToString();
-            pencil.Durability = pencil.Durability;
-            return pencil;
+            return WrittenText.ToString();
         }
 
 

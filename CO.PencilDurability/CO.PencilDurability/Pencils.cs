@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.IO;
-
-namespace CO.PencilDurability
+﻿namespace CO.PencilDurability
 {
     public class Pencils
     {
@@ -27,7 +23,7 @@ namespace CO.PencilDurability
             {
                 Durability = 30000, //To Do: add to config? 
                 Length = 10, //To Do: add to config? 
-                Eraser = 10
+                Eraser = 100
             };
             return NewPencil;
 

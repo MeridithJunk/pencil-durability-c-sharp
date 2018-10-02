@@ -19,7 +19,7 @@ namespace PencilDurabilityTests
             _pencils = new Pencils();
 
             _pencil = _pencils.CreatePencil();
-            _writer = new Writer(text, _pencil);
+            _writer = new Writer( _pencil);
             _edit = new Edit(_pencil);
             _pencils = new Pencils();
         }
@@ -29,10 +29,11 @@ namespace PencilDurabilityTests
         // Refactored: Text written by the pencil should always be appended to existing text on the paper. 
         //Thus, given a piece of paper with the text "She sells sea shells", when a pencil is instructed to write 
         //" down by the sea shore" on the paper, the paper will then contain the entire string (i.e. "She sells sea shells down by the sea shore").
-        [TestCase("down by the sea shore", "She sells sea shells down by the sea shore")]
-        public void ShouldReflectTextThatWasWritten(string text, string ExpectedResult)
+        [TestCase("She sells sea shells", " down by the sea shore", "She sells sea shells down by the sea shore")]
+        public void ShouldReflectTextThatWasWritten(string text1, string text2, string ExpectedResult)
         {
-            Assert.AreEqual(ExpectedResult, _writer.Write(text));
+            _writer.Write(text1);
+            Assert.AreEqual(ExpectedResult, _writer.Write(text2));
 
         }
 
@@ -42,15 +43,16 @@ namespace PencilDurabilityTests
         //A pencil created with a high point durability will still go dull, but not as fast as one with a 
         //lower durability rating.
         [Test]
-        public void PencilShouldAppendTextbasedOnPencilDurability()
+        [TestCase(100, "Hello There", "Hello There")]
+        public void PencilShouldAppendTextbasedOnPencilDurability(int durability, string text, string expectedResult)
         {
             Pencil pencil = new Pencil()
             {
-                Durability = 3
+                Durability = durability,
+                
             };
-            pencil = _writer.AppendWritingBasedOnPencilDurability("Hello", pencil);
-
-            Assert.AreEqual(pencil.TextWritten, pencil.TextWritten);
+            _writer = new Writer(pencil);
+            Assert.AreEqual(expectedResult, _writer.Write(text));
 
         }
 
@@ -58,29 +60,32 @@ namespace PencilDurabilityTests
         //of four is instructed to write the string "text", the paper will contain the entire string. but if a pencil with point durability of four is instructed to write the 
         //string "text", the paper will only show "tex ".
         [Test]
-        public void PencilShouldReduceDurabilityWhenWriting()
+        [TestCase(10, "Hello There", 0)]
+        public void PencilShouldReduceDurabilityWhenWriting(int durability, string text, int expectedResult)
         {
             Pencil pencil = new Pencil()
             {
-                Durability = 3
+                Durability = durability
             };
 
-            pencil = _writer.AppendWritingBasedOnPencilDurability("Hello", pencil);
-            Assert.AreEqual(0, pencil.Durability);
+            _writer = new Writer(pencil);
+            _writer.Write(text); 
+            Assert.AreEqual(expectedResult, pencil.Durability);
 
         }
 
         //Writing spaces and newlines expends no graphite, therefore "writing" these characters should not affect the pencil point.
         [Test]
-        public void WrittenTextShouldMaintainTheSameCharacterCount()
+        [TestCase(10, "Hello There", "Hello The  ")]
+        public void WrittenTextShouldMaintainTheSameCharacterCount(int durability, string text, string expectedResult)
         {
             Pencil pencil = new Pencil()
             {
-                Durability = 3
+                Durability = durability
             };
 
-            pencil = _writer.AppendWritingBasedOnPencilDurability("Hello There", pencil);
-            Assert.AreEqual("He         ", pencil.TextWritten);
+            _writer = new Writer(pencil); 
+            Assert.AreEqual(expectedResult, _writer.AppendWritingBasedOnPencilDurability(text));
         }
 
         //when a pencil is sharpened, it regains its initial point durability and can write more characters before
@@ -144,12 +149,19 @@ namespace PencilDurabilityTests
         // When a pencil is created, it can be provided with a value for eraser durability.For simplicity, all characters except
         // for white space should degrade the eraser by a value of one.Text should be erased in the opposite order it was written. Once the eraser durability is zero, the eraser is worn out and can no longer erase.
         [Test]
-        public void ShouldDegradeEraserAsItDegrades()
+        [TestCase("sells", "She sells ", 100, 5)]
+        public void ShouldDegradeEraserAsItDegrades(string erase, string text, int EraserDurability, int ExpectedResult)
         {
-            int expectedResult = _pencil.Eraser - 5;
-            var erase = "sells";
+             var pencil = new Pencil
+            {
+                Eraser = EraserDurability,
+                IndexOfLastRemovedWord = 4
+                
+            };
+            
+            _edit = new Edit(pencil);
             _edit.EraseWordFromText(text, erase);
-            Assert.AreEqual(expectedResult, _pencil.Eraser);
+            Assert.AreEqual(95, pencil.Eraser);
         }
 
         [Test]
@@ -176,11 +188,11 @@ namespace PencilDurabilityTests
         }
 
         [Test]
-        [TestCase("onion", "An       a day keeps the doctor away", "An onion a day keeps the doctor away")]
-        public void ShouldUpdatePencilToBeCorrectLastEditedIndex(string addword, string text, string ExpectedResult)
+        [TestCase("onion", "An       a day keeps the doctor away", 3)]
+        public void ShouldUpdatePencilToBeCorrectLastEditedIndex(string addword, string text, int ExpectedResult)
         {
             _edit.EditTextRemoveWord(text, addword);
-            Assert.AreEqual(3, _pencil.IndexOfLastRemovedWord);
+            Assert.AreEqual(ExpectedResult, _pencil.IndexOfLastRemovedWord);
         }
 
 
@@ -188,10 +200,15 @@ namespace PencilDurabilityTests
         //existing non-whitespace characters on the page, these character collisions should be represented by the "@" character.For example, writing "artichoke" in 
         //the middle of "An       a day keeps the doctor away" would result in "An artich@k@ay keeps the doctor away".
         [Test]
-        [TestCase("An       a day keeps the doctor away", "artichoke", 3)]
-        public void WhenTextOverlapsFromEditingLettersAreReplacedWithATsign(string text, string replacementWord, int IndexOfLastRemovedWord)
+        [TestCase("An       a day keeps the doctor away", "artichoke", 3, "An artich@k@ay keeps the doctor away")]
+        public void WhenTextOverlapsFromEditingLettersAreReplacedWithATsign(string text, string replacementWord, int IndexOfLastRemovedWord, string expectedResult)
         {
-            Assert.AreEqual("An artich@k@ay keeps the doctor away", _edit.ReplaceinText(text, replacementWord, IndexOfLastRemovedWord));
+            _pencil = new Pencil
+            {
+                IndexOfLastRemovedWord = IndexOfLastRemovedWord
+            };
+            _edit = new Edit(_pencil);
+            Assert.AreEqual(expectedResult, _edit.ReplaceinText(text, replacementWord));
         }
 
 
