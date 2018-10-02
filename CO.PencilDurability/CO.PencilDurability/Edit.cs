@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace CO.PencilDurability
 {
@@ -14,19 +16,19 @@ namespace CO.PencilDurability
         public string EraseWordFromText(string text, string ErasedWord)
         {
             var erasedLength = ErasedWord.Length;
-            var indexinText = text.LastIndexOf(ErasedWord); ;
+            var indexinText = Regex.Match(text, @"\W" + ErasedWord + @"\W", RegexOptions.RightToLeft).Index;
 
             if (erasedLength <= _pencil.Eraser)
             {
                 _pencil.Eraser = _pencil.Eraser - erasedLength;
-                return text.Remove(indexinText, ErasedWord.Length ).Insert(indexinText, new String(' ', erasedLength));
+                return text.Remove(indexinText, ErasedWord.Length + 1).Insert(indexinText, new String(' ', erasedLength + 1));
             }
             else
             {
                 var AvailableErased = ErasedWord.Remove(erasedLength - _pencil.Eraser);
                 AvailableErased += new String(' ', _pencil.Eraser);
                 _pencil.Eraser = 0;
-                return text.Remove(indexinText, erasedLength).Insert(indexinText,  AvailableErased );
+                return text.Remove(indexinText, erasedLength + 1).Insert(indexinText, " " +  AvailableErased);
             }
         }
 
