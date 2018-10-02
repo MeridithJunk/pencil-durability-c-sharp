@@ -14,19 +14,19 @@ namespace CO.PencilDurability
         public string EraseWordFromText(string text, string ErasedWord)
         {
             var erasedLength = ErasedWord.Length;
-            var indexinText = text.LastIndexOf(" " + ErasedWord + " ");
+            var indexinText = text.LastIndexOf(ErasedWord); ;
 
             if (erasedLength <= _pencil.Eraser)
             {
                 _pencil.Eraser = _pencil.Eraser - erasedLength;
-                return text.Remove(indexinText, ErasedWord.Length + 2).Insert(indexinText, new String(' ', erasedLength + 2));
+                return text.Remove(indexinText, ErasedWord.Length ).Insert(indexinText, new String(' ', erasedLength));
             }
             else
             {
                 var AvailableErased = ErasedWord.Remove(erasedLength - _pencil.Eraser);
                 AvailableErased += new String(' ', _pencil.Eraser);
                 _pencil.Eraser = 0;
-                return text.Remove(indexinText, erasedLength + 2).Insert(indexinText, ' ' + AvailableErased + ' ');
+                return text.Remove(indexinText, erasedLength).Insert(indexinText,  AvailableErased );
             }
         }
 

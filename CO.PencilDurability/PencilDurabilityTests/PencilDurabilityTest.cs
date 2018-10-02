@@ -106,16 +106,17 @@ namespace PencilDurabilityTests
         //A pencil should also be created with an initial length value.Pencils of short lengthwill only be sharpenable a small number of times while 
         //pencils of longer length can be sharpened more times.The pencil's length is reduced by one each time it is sharpened. When a pencil's length is zero, then sharpening it no longer restores its point durabliity.
         [Test]
-        public void ShouldDecreaseLengthEverytimePencilIsSharpened()
+        [TestCase(10, 10)]
+        public void ShouldDecreaseLengthEverytimePencilIsSharpened(int durability, int length)
         {
             _pencil = new Pencil()
             {
-                Durability = 10,
-                Length = 10
+                Durability = durability,
+                Length = length
             };
             _pencils.SharpenPencil(_pencil);
             _pencils.SharpenPencil(_pencil);
-            Assert.AreEqual(8, _pencil.Length);
+            Assert.AreEqual(length - 2, _pencil.Length);
         }
 
         public void ShouldNotResetPencilDurabilityAfterPencilLengthIsZero()
@@ -134,7 +135,8 @@ namespace PencilDurabilityTests
         //When the pencil is instructed to erase text from the paper, the last occurrence of that text on the paper will be replaced with empty spaces.
         [Test]
         [TestCase("How Much wood would a woodchuck chuck if a woodchuck could chuck wood?", "chuck", 5, "How Much wood would a woodchuck chuck if a woodchuck could       wood?")]
-        [TestCase("woodchuck chuck if a woodchuck could       wood?", "chuck", 4, "woodchuck c     if a woodchuck could       wood?")]
+        [TestCase("woodchuck chuck if a woodchuck could       wood?", "chuck", 4, "woodchuck chuck if a woodc     could       wood?")]
+        [TestCase("She sells Sea shells", "sells", 2, "She sel   Sea shells")]
         public void ShouldEraseLastOccuranceOfWordFromString(string text, string erase, int EraserDurability, string expectedResult)
         {
             _pencil = new Pencil
@@ -145,23 +147,23 @@ namespace PencilDurabilityTests
 
             Assert.AreEqual(expectedResult, _edit.EraseWordFromText(text, erase));
         }
-
+        //TO DO HERE: 
         // When a pencil is created, it can be provided with a value for eraser durability.For simplicity, all characters except
         // for white space should degrade the eraser by a value of one.Text should be erased in the opposite order it was written. Once the eraser durability is zero, the eraser is worn out and can no longer erase.
         [Test]
-        [TestCase("sells", "She sells ", 100, 5)]
-        public void ShouldDegradeEraserAsItDegrades(string erase, string text, int EraserDurability, int ExpectedResult)
+        [TestCase("sells", "She sells ", 100, 4)]
+        public void ShouldDegradeEraserAsItDegrades(string erase, string text, int EraserDurability, int index)
         {
              var pencil = new Pencil
             {
                 Eraser = EraserDurability,
-                IndexOfLastRemovedWord = 4
-                
-            };
+                IndexOfLastRemovedWord = index
+
+             };
             
             _edit = new Edit(pencil);
             _edit.EraseWordFromText(text, erase);
-            Assert.AreEqual(95, pencil.Eraser);
+            Assert.AreEqual(EraserDurability - erase.Length, pencil.Eraser);
         }
 
         [Test]
