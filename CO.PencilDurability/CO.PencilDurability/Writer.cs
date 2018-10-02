@@ -17,10 +17,11 @@ namespace CO.PencilDurability
         }
         public string Write(string text)
         {
-
             return _writeText += text;
         }
 
+
+        //To do: Maybe split into two methods? 
         public Pencil AppendWritingBasedOnPencilDurability(string text, Pencil pencil)
         {
             StringBuilder WrittenText = new StringBuilder();
@@ -46,92 +47,13 @@ namespace CO.PencilDurability
                 {
                     WrittenText.Append(" ");
                 }
-
             }
             pencil.TextWritten = WrittenText.ToString();
             pencil.Durability = pencil.Durability;
             return pencil;
-
         }
 
 
-
-        public void SharpenPencil()
-        {
-            if (_pencil.Length > 0)
-            {
-                _pencil.Length--;
-                _pencil.Durability = 40000;
-            }
-            else
-            {
-                _pencil.Durability = 0;
-
-            }
-
-        }
-
-        public string EraseWordFromText(string text, string ErasedWord)
-        {
-            var erasedLength = ErasedWord.Length;
-            var indexinText = text.LastIndexOf(" " + ErasedWord + " ");
-
-            if (erasedLength <= _pencil.Eraser)
-            {
-                _pencil.Eraser = _pencil.Eraser - erasedLength;
-                return text.Remove(indexinText, ErasedWord.Length + 2).Insert(indexinText, new String(' ', erasedLength + 2));
-            }
-            else
-            {
-                var AvailableErased = ErasedWord.Remove(erasedLength - _pencil.Eraser);
-                AvailableErased += new String(' ', _pencil.Eraser);
-                _pencil.Eraser = 0;
-                return text.Remove(indexinText, erasedLength + 2).Insert(indexinText, ' ' + AvailableErased + ' ');
-            }
-        }
-        //She sells sea shells 
-        public string EditTextRemoveWord(string text, string editedWord)
-        {
-            var RemoveSpaces = new String(' ', editedWord.Length + 2);
-            var indexinText = text.LastIndexOf(RemoveSpaces);
-            _pencil.IndexOfLastRemovedWord = indexinText + 1; 
-            return text.Remove(indexinText, RemoveSpaces.Length).Insert(indexinText, ' ' + editedWord + ' ');
-        }
-
-        public Pencil CreatePencil()
-        {
-            Pencil NewPencil = new Pencil();
-            NewPencil.Durability = 100;
-            NewPencil.Length = 3;
-            return NewPencil;
-
-        }
-
-        public string ReplaceinText(string text, string replacementWord, int IndexOfLastRemovedWord)
-        {
-            var textArray = text.ToArray();
-            int CountOfCharacters = 0;
-
-            for (int i = IndexOfLastRemovedWord; i < replacementWord.Length + 3; i++)
-            {
-                var character = textArray[i].ToString();
-
-                if (String.IsNullOrWhiteSpace(character))
-                {
-
-                    var firstcharacter = replacementWord.ToArray();
-                    textArray[i] = firstcharacter[CountOfCharacters];
-                    CountOfCharacters++;
-                }
-                else
-                {
-
-                    textArray[i] = '@';
-                    CountOfCharacters++;
-                }
-            }
-            return string.Concat(textArray);
-        }
     }
 
 

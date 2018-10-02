@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
 
 namespace CO.PencilDurability
 {
@@ -6,7 +8,11 @@ namespace CO.PencilDurability
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var builder = new ConfigurationBuilder()
+                  .SetBasePath(Directory.GetCurrentDirectory())
+                  .AddJsonFile("appsettings.json");
+
+            var configuration = builder.Build();
         }
     }
 }

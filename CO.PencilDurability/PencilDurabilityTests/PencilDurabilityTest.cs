@@ -8,22 +8,20 @@ namespace PencilDurabilityTests
     public class PencilDurabilityTest
     {
         private Writer _writer;
-        private Pencil _pencil; 
-        private string Text = "She sells sea shells ";
+        private Pencil _pencil;
+        private Edit _edit;
+        private Pencils _pencils;
+        private string text = "She sells sea shells ";
 
         [SetUp]
         public void SetUp()
         {
-            _pencil = new Pencil
-            {
-                Durability = 10,
-                TextWritten = Text,
-                Length = 3, 
-                Eraser = 100,
-                IndexOfLastRemovedWord = 3
+            _pencils = new Pencils();
 
-        }; 
-            _writer = new Writer(Text, _pencil); 
+            _pencil = _pencils.CreatePencil();
+            _writer = new Writer(text, _pencil);
+            _edit = new Edit(_pencil);
+            _pencils = new Pencils();
         }
 
         //When the pencil is instructed to write a string of text on a sheet of paper,
@@ -67,7 +65,7 @@ namespace PencilDurabilityTests
                 Durability = 3
             };
 
-            pencil = _writer.AppendWritingBasedOnPencilDurability("Hello", pencil); 
+            pencil = _writer.AppendWritingBasedOnPencilDurability("Hello", pencil);
             Assert.AreEqual(0, pencil.Durability);
 
         }
@@ -92,7 +90,7 @@ namespace PencilDurabilityTests
         public void PencilShouldBeSharpened()
         {
             //30000
-            _writer.SharpenPencil(); 
+            _pencils.SharpenPencil(_pencil);
             Assert.AreEqual(40000, _pencil.Durability);
         }
 
@@ -100,19 +98,19 @@ namespace PencilDurabilityTests
         //A pencil should also be created with an initial length value.Pencils of short lengthwill only be sharpenable a small number of times while 
         //pencils of longer length can be sharpened more times.The pencil's length is reduced by one each time it is sharpened. When a pencil's length is zero, then sharpening it no longer restores its point durabliity.
         [Test]
-        public void  ShouldDecreaseLengthEverytimePencilIsSharpened()
+        public void ShouldDecreaseLengthEverytimePencilIsSharpened()
         {
-            _writer.SharpenPencil();
-            _writer.SharpenPencil();
+            _pencils.SharpenPencil(_pencil);
+            _pencils.SharpenPencil(_pencil);
             Assert.AreEqual(1, _pencil.Length);
         }
 
         public void ShouldNotResetPencilDurabilityAfterPencilLengthIsZero()
         {
-            _writer.SharpenPencil();
-            _writer.SharpenPencil();
-            _writer.SharpenPencil();
-            _writer.SharpenPencil();
+            _pencils.SharpenPencil(_pencil);
+            _pencils.SharpenPencil(_pencil);
+            _pencils.SharpenPencil(_pencil);
+            _pencils.SharpenPencil(_pencil);
             Assert.AreEqual(0, _pencil.Durability);
         }
 
@@ -126,16 +124,10 @@ namespace PencilDurabilityTests
             {
                 Eraser = EraserDurability
             };
-            _writer = new Writer(Text, _pencil);
+            _edit = new Edit(_pencil);
 
-            Assert.AreEqual(expectedResult, _writer.EraseWordFromText(text, erase));
+            Assert.AreEqual(expectedResult, _edit.EraseWordFromText(text, erase));
         }
-
-
-
-        //To do: 
-        //and if the string "chuck" is erased again, the paper should read:
-        //"How much wood would a woodchuck chuck if a wood      could       wood?"
 
         // When a pencil is created, it can be provided with a value for eraser durability.For simplicity, all characters except
         // for white space should degrade the eraser by a value of one.Text should be erased in the opposite order it was written. Once the eraser durability is zero, the eraser is worn out and can no longer erase.
@@ -144,21 +136,20 @@ namespace PencilDurabilityTests
         {
             int expectedResult = _pencil.Eraser - 5;
             var erase = "sells";
-            _writer.EraseWordFromText(Text, erase);
+            _edit.EraseWordFromText(text, erase);
             Assert.AreEqual(expectedResult, _pencil.Eraser);
         }
-        
+
         [Test]
         public void EraserShouldOnlyEraseAsMuchAsItsCapableOfErasing()
         {
             _pencil = new Pencil
             {
                 Eraser = 2
-
             };
-            _writer = new Writer(Text, _pencil);
+            _edit = new Edit(_pencil);
             var erase = "sells";
-            Assert.AreEqual("She sel   sea shells ", _writer.EraseWordFromText(Text, erase));
+            Assert.AreEqual("She sel   sea shells ", _edit.EraseWordFromText(text, erase));
 
         }
 
@@ -169,14 +160,14 @@ namespace PencilDurabilityTests
         [TestCase("onion", "An       a day keeps the doctor away", "An onion a day keeps the doctor away")]
         public void ShouldBeAbleToEdit(string addword, string text, string ExpectedResult)
         {
-            Assert.AreEqual(ExpectedResult, _writer.EditTextRemoveWord(text, addword));
+            Assert.AreEqual(ExpectedResult, _edit.EditTextRemoveWord(text, addword));
         }
 
         [Test]
         [TestCase("onion", "An       a day keeps the doctor away", "An onion a day keeps the doctor away")]
         public void ShouldUpdatePencilToBeCorrectLastEditedIndex(string addword, string text, string ExpectedResult)
         {
-            _writer.EditTextRemoveWord(text, addword);
+            _edit.EditTextRemoveWord(text, addword);
             Assert.AreEqual(3, _pencil.IndexOfLastRemovedWord);
         }
 
@@ -189,9 +180,9 @@ namespace PencilDurabilityTests
         public void WhenTextOverlapsFromEditingLettersAreReplacedWithATsign(string text, string replacementWord, int IndexOfLastRemovedWord)
         {
 
-            Assert.AreEqual("An artich@k@ay keeps the doctor away", _writer.ReplaceinText(text, replacementWord, IndexOfLastRemovedWord));
+            Assert.AreEqual("An artich@k@ay keeps the doctor away", _edit.ReplaceinText(text, replacementWord, IndexOfLastRemovedWord));
         }
 
-        
+
     }
 }
