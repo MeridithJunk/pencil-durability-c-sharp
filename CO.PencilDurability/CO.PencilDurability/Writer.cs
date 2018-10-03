@@ -12,14 +12,9 @@ namespace CO.PencilDurability
             _pencil = pencil;
 
         }
-        public string Write(string text)
-        {
-            return _writeText += AppendWritingBasedOnPencilDurability(text);
-        }
-
 
         //To do: Maybe split into two methods? 
-        public string AppendWritingBasedOnPencilDurability(string text)
+        public string Write(string text)
         {
             StringBuilder WrittenText = new StringBuilder();
             var CleanTextArray = text.ToCharArray();
@@ -45,9 +40,8 @@ namespace CO.PencilDurability
                     WrittenText.Append(" ");
                 }
             }
-            return WrittenText.ToString();
+            return _writeText += WrittenText.ToString();
         }
-
 
     }
 

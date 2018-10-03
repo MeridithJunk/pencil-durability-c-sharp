@@ -85,7 +85,7 @@ namespace PencilDurabilityTests
             };
 
             _writer = new Writer(pencil); 
-            Assert.AreEqual(expectedResult, _writer.AppendWritingBasedOnPencilDurability(text));
+            Assert.AreEqual(expectedResult, _writer.Write(text));
         }
 
         //when a pencil is sharpened, it regains its initial point durability and can write more characters before
@@ -145,7 +145,7 @@ namespace PencilDurabilityTests
             };
             _edit = new Edit(_pencil);
 
-            Assert.AreEqual(expectedResult, _edit.EraseWordFromText(text, erase));
+            Assert.AreEqual(expectedResult, _edit.EraseWord(text, erase));
         }
         //TO DO HERE: 
         // When a pencil is created, it can be provided with a value for eraser durability.For simplicity, all characters except
@@ -162,7 +162,7 @@ namespace PencilDurabilityTests
              };
             
             _edit = new Edit(pencil);
-            _edit.EraseWordFromText(text, erase);
+            _edit.EraseWord(text, erase);
             Assert.AreEqual(EraserDurability - erase.Length, pencil.Eraser);
         }
 
@@ -175,7 +175,7 @@ namespace PencilDurabilityTests
             };
             _edit = new Edit(_pencil);
             var erase = "sells";
-            Assert.AreEqual("She sel   sea shells ", _edit.EraseWordFromText(text, erase));
+            Assert.AreEqual("She sel   sea shells ", _edit.EraseWord(text, erase));
 
         }
 
@@ -193,7 +193,7 @@ namespace PencilDurabilityTests
             };
             _edit = new Edit(_pencil);
 
-            Assert.AreEqual(ExpectedResult, _edit.EditTextRemoveWord(text, addword));
+            Assert.AreEqual(ExpectedResult, _edit.RemoveWord(text, addword));
         }
 
         [Test]
@@ -202,7 +202,7 @@ namespace PencilDurabilityTests
    
         public void ShouldUpdatePencilToBeCorrectLastEditedIndex(string addword, string text, int ExpectedResult)
         {
-            _edit.EditTextRemoveWord(text, addword);
+            _edit.RemoveWord(text, addword);
             Assert.AreEqual(ExpectedResult, _pencil.IndexOfLastRemovedWord);
         }
 
@@ -212,7 +212,7 @@ namespace PencilDurabilityTests
         //the middle of "An       a day keeps the doctor away" would result in "An artich@k@ay keeps the doctor away".
         [Test]
         [TestCase("An       a day keeps the doctor away", "artichoke", 3, "An artich@k@ay keeps the doctor away")]
-        [TestCase("woodchuck c     if a woodchuck could       wood?", "Meridith", 37, "woodchuck c     if a woodchuck could Meridi@ood?")]
+        [TestCase("woodchuck c     if a woodchuck could       wood?", "Meridith", 37, "woodchuck c     if a woodchuck could Meridi@@od?")]
         public void WhenTextOverlapsFromEditingLettersAreReplacedWithATsign(string text, string replacementWord, int IndexOfLastRemovedWord, string expectedResult)
         {
             _pencil = new Pencil
@@ -220,7 +220,7 @@ namespace PencilDurabilityTests
                 IndexOfLastRemovedWord = IndexOfLastRemovedWord
             };
             _edit = new Edit(_pencil);
-            Assert.AreEqual(expectedResult, _edit.ReplaceinText(text, replacementWord, IndexOfLastRemovedWord));
+            Assert.AreEqual(expectedResult, _edit.ReplaceWord(text, replacementWord, IndexOfLastRemovedWord));
         }
     }
 }

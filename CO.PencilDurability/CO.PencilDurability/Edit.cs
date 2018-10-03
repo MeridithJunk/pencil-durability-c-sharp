@@ -13,7 +13,7 @@ namespace CO.PencilDurability
             _pencil = pencil; 
         }
 
-        public string EraseWordFromText(string text, string ErasedWord)
+        public string EraseWord(string text, string ErasedWord)
         {
             var erasedLength = ErasedWord.Length;
             var indexinText = Regex.Match(text, @"\W" + ErasedWord + @"\W", RegexOptions.RightToLeft).Index;
@@ -32,7 +32,7 @@ namespace CO.PencilDurability
             }
         }
 
-        public string EditTextRemoveWord(string text, string editedWord)
+        public string RemoveWord(string text, string editedWord)
         {
             var RemoveSpaces = new String(' ', editedWord.Length + 2);
             var indexinText = text.LastIndexOf(RemoveSpaces);
@@ -40,12 +40,12 @@ namespace CO.PencilDurability
             return text.Remove(indexinText, RemoveSpaces.Length).Insert(indexinText, ' ' + editedWord + ' ');
         }
 
-        public string ReplaceinText(string text, string replacementWord, int IndexOfLastRemovedWord)
+        public string ReplaceWord(string text, string replacementWord, int IndexOfLastRemovedWord)
         {
             var textArray = text.ToArray();
             int CountOfCharacters = 0;
 
-            for (int i = 0; i < replacementWord.Length - 1; i++)
+            for (int i = 0; i < replacementWord.Length ; i++)
             {
                 var character = textArray[IndexOfLastRemovedWord].ToString();
 
