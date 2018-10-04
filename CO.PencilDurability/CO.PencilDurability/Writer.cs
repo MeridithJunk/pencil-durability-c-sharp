@@ -15,8 +15,6 @@ namespace CO.PencilDurability
 
         }
 
-
-        //To do: Maybe split into two methods? 
         public string Write(string text)
         {
             StringBuilder WrittenText = new StringBuilder();

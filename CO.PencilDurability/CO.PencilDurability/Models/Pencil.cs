@@ -22,7 +22,7 @@
             if (pencil.Length > 0)
             {
                 pencil.Length--;
-                pencil.Durability = SetDurability; //To Do: add to config? 
+                pencil.Durability = SetDurability;
             }
             else
             {
