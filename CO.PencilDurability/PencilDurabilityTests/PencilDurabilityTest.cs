@@ -81,7 +81,7 @@ namespace PencilDurabilityTests
         {
             _pencil.Durability = 10;
             _pencil.Length = 10;
-            _pencil.SharpenPencil(_pencil);
+            _pencil = _pencil.SharpenPencil(_pencil);
             Assert.AreEqual(30000, _pencil.Durability);
         }
 

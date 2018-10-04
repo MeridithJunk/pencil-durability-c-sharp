@@ -54,7 +54,7 @@ namespace CO.PencilDurability
 
             if (erasedLength <= _pencil.Eraser)
             {
-                _pencil.Eraser = _pencil.Eraser - erasedLength;
+                _pencil.Eraser = _pencil.Eraser - (erasedLength * _pencil.EraserDurability);
                 return text.Remove(indexinText, ErasedWord.Length + 1).Insert(indexinText, new String(' ', erasedLength + 1));
             }
             else

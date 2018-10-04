@@ -7,18 +7,22 @@
     {
         public const int UpperCaseDepreciation = 2;
         public const int OtherCaseDepreciation = 1;
-        public int Durability = 30000;
-        public int Length = 10;
-        public int IndexOfLastRemovedWord = 0;
-        public int Eraser = 100;
+        public const int SetDurability = 30000;
+        public const int SetLength = 10;
+        public const int SetEraser = 100;
 
+        public int Durability = SetDurability;
+        public int Length = SetLength;
+        public int IndexOfLastRemovedWord = 0;
+        public int Eraser = SetEraser;
+        public int EraserDurability = 1; 
 
         public Pencil SharpenPencil(Pencil pencil)
         {
             if (pencil.Length > 0)
             {
                 pencil.Length--;
-                pencil.Durability = 30000; //To Do: add to config? 
+                pencil.Durability = SetDurability; //To Do: add to config? 
             }
             else
             {
