@@ -27,6 +27,18 @@
             return pencil;
         }
 
+        public int DecreaseDurability(char character)
+        {
+
+            if (char.IsUpper(character))
+            {
+                return UpperCaseDepreciation;
+            }
+            else
+            {
+                return OtherCaseDepreciation;
+            }
+        }
     }
 }
 

@@ -26,8 +26,7 @@ namespace CO.PencilDurability
                 if (char.IsUpper(character) && _pencil.Durability >= 2)
                 {
                     WrittenText.Append(character);
-                    _pencil.Durability--;
-                    _pencil.Durability--; //Removing two for capitals
+                  _pencil.Durability -= _pencil.DecreaseDurability(character);
                 }
                 else if (Char.IsWhiteSpace(character))
                 {
@@ -36,7 +35,7 @@ namespace CO.PencilDurability
                 else if (_pencil.Durability > 0)
                 {
                     WrittenText.Append(character);
-                    _pencil.Durability--; // Removing one for all others 
+                    _pencil.Durability -= _pencil.DecreaseDurability(character); 
                 }
                 else if (_pencil.Durability == 0)
                 {
