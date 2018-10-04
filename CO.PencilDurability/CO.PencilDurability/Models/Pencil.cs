@@ -5,17 +5,25 @@
 
     public class Pencil
     {
-        public const int UpperCaseDepreciation = 2;
-        public const int OtherCaseDepreciation = 1;
-        public const int SetDurability = 30000;
-        public const int SetLength = 10;
-        public const int SetEraser = 100;
 
-        public int Durability = SetDurability;
-        public int Length = SetLength;
-        public int IndexOfLastRemovedWord = 0;
-        public int Eraser = SetEraser;
-        public int EraserDurability = 1; 
+        //Model
+        public int Eraser;
+        public int Durability;
+        public int Length;
+        public int IndexOfLastRemovedWord;
+
+        //constant for resetting durability:
+        public int SetDurability;
+
+
+
+        public Pencil(int _Durability, int _Length, int _Eraser)
+        {
+            Eraser = _Eraser;
+            Durability = _Durability;
+            Length = _Length;
+            SetDurability = _Durability;
+        }
 
         public Pencil SharpenPencil(Pencil pencil)
         {
@@ -24,25 +32,10 @@
                 pencil.Length--;
                 pencil.Durability = SetDurability;
             }
-            else
-            {
-                pencil.Durability = 0;
-            }
+
             return pencil;
         }
 
-        public int DecreaseDurability(char character)
-        {
-
-            if (char.IsUpper(character))
-            {
-                return UpperCaseDepreciation;
-            }
-            else
-            {
-                return OtherCaseDepreciation;
-            }
-        }
     }
 }
 

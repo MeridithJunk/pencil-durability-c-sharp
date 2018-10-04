@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CO.PencilDurability.Models;
+using System;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,10 +9,13 @@ namespace CO.PencilDurability
     public class Writer
     {
         public string _writeText;
-        public Pencil _pencil { get; set; }
-        public Writer(Pencil pencil)
+        public Pencil _pencil;
+        public Paper _paper;
+
+        public Writer(Pencil pencil, Paper paper)
         {
             _pencil = pencil;
+            _paper = paper;
 
         }
 
@@ -24,7 +28,7 @@ namespace CO.PencilDurability
                 if (char.IsUpper(character) && _pencil.Durability >= 2)
                 {
                     WrittenText.Append(character);
-                  _pencil.Durability -= _pencil.DecreaseDurability(character);
+                    _pencil.Durability -= _paper.DecreasePencilDurability(character);
                 }
                 else if (Char.IsWhiteSpace(character))
                 {
@@ -33,7 +37,7 @@ namespace CO.PencilDurability
                 else if (_pencil.Durability > 0)
                 {
                     WrittenText.Append(character);
-                    _pencil.Durability -= _pencil.DecreaseDurability(character); 
+                    _pencil.Durability -= _paper.DecreasePencilDurability(character);
                 }
                 else if (_pencil.Durability == 0)
                 {
@@ -43,7 +47,7 @@ namespace CO.PencilDurability
             return _writeText += WrittenText.ToString();
         }
 
-  
+
 
         public string EraseWord(string text, string ErasedWord)
         {
@@ -52,7 +56,7 @@ namespace CO.PencilDurability
 
             if (erasedLength <= _pencil.Eraser)
             {
-                _pencil.Eraser = _pencil.Eraser - (erasedLength * _pencil.EraserDurability);
+                _pencil.Eraser = _paper.EraserDepreciation(erasedLength, _pencil.Eraser);
                 return text.Remove(indexinText, ErasedWord.Length + 1).Insert(indexinText, new String(' ', erasedLength + 1));
             }
             else
