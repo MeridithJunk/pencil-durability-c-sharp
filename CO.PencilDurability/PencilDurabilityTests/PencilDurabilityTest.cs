@@ -8,20 +8,14 @@ namespace PencilDurabilityTests
     public class PencilDurabilityTest
     {
         private Writer _writer;
-        private Pencil _pencil;
-        private Edit _edit;
-        private Pencils _pencils;
-        private string text = "She sells sea shells ";
+        public Pencil _pencil;
+        private string Text = "She sells sea shells ";
 
         [SetUp]
         public void SetUp()
         {
-            _pencils = new Pencils();
-
-            _pencil = _pencils.CreatePencil();
-            _writer = new Writer( _pencil);
-            _edit = new Edit(_pencil);
-            _pencils = new Pencils();
+            _pencil = new Pencil();
+            _writer = new Writer(_pencil);
         }
 
         //When the pencil is instructed to write a string of text on a sheet of paper,
@@ -46,12 +40,9 @@ namespace PencilDurabilityTests
         [TestCase(100, "Hello There", "Hello There")]
         public void PencilShouldAppendTextbasedOnPencilDurability(int durability, string text, string expectedResult)
         {
-            Pencil pencil = new Pencil()
-            {
-                Durability = durability,
-                
-            };
-            _writer = new Writer(pencil);
+
+            _pencil.Durability = durability;
+            _writer = new Writer(_pencil);
             Assert.AreEqual(expectedResult, _writer.Write(text));
 
         }
@@ -63,14 +54,11 @@ namespace PencilDurabilityTests
         [TestCase(10, "Hello There", 0)]
         public void PencilShouldReduceDurabilityWhenWriting(int durability, string text, int expectedResult)
         {
-            Pencil pencil = new Pencil()
-            {
-                Durability = durability
-            };
 
-            _writer = new Writer(pencil);
-            _writer.Write(text); 
-            Assert.AreEqual(expectedResult, pencil.Durability);
+            _pencil.Durability = durability;
+
+            _writer.Write(text);
+            Assert.AreEqual(expectedResult, _pencil.Durability);
 
         }
 
@@ -79,12 +67,9 @@ namespace PencilDurabilityTests
         [TestCase(10, "Hello There", "Hello The  ")]
         public void WrittenTextShouldMaintainTheSameCharacterCount(int durability, string text, string expectedResult)
         {
-            Pencil pencil = new Pencil()
-            {
-                Durability = durability
-            };
+            _pencil.Durability = durability;
 
-            _writer = new Writer(pencil); 
+            _writer = new Writer(_pencil);
             Assert.AreEqual(expectedResult, _writer.Write(text));
         }
 
@@ -94,11 +79,9 @@ namespace PencilDurabilityTests
         [Test]
         public void PencilShouldBeSharpened()
         {
-            _pencil =new Pencil {
-               Durability  = 10, 
-               Length = 10
-            };
-            _pencils.SharpenPencil(_pencil);
+            _pencil.Durability = 10;
+            _pencil.Length = 10;
+            _pencil.SharpenPencil(_pencil);
             Assert.AreEqual(30000, _pencil.Durability);
         }
 
@@ -109,26 +92,21 @@ namespace PencilDurabilityTests
         [TestCase(10, 10)]
         public void ShouldDecreaseLengthEverytimePencilIsSharpened(int durability, int length)
         {
-            _pencil = new Pencil()
-            {
-                Durability = durability,
-                Length = length
-            };
-            _pencils.SharpenPencil(_pencil);
-            _pencils.SharpenPencil(_pencil);
+            _pencil.Durability = durability;
+            _pencil.Length = length;
+            _pencil.SharpenPencil(_pencil);
+            _pencil.SharpenPencil(_pencil);
             Assert.AreEqual(length - 2, _pencil.Length);
         }
 
         public void ShouldNotResetPencilDurabilityAfterPencilLengthIsZero()
         {
-            _pencil = new Pencil()
-            {
-                Durability = 5
-            };
-            _pencils.SharpenPencil(_pencil);
-            _pencils.SharpenPencil(_pencil);
-            _pencils.SharpenPencil(_pencil);
-            _pencils.SharpenPencil(_pencil);
+
+            _pencil.Durability = 5;
+            _pencil.SharpenPencil(_pencil);
+            _pencil.SharpenPencil(_pencil);
+            _pencil.SharpenPencil(_pencil);
+            _pencil.SharpenPencil(_pencil);
             Assert.AreEqual(0, _pencil.Durability);
         }
 
@@ -139,13 +117,11 @@ namespace PencilDurabilityTests
         [TestCase("She sells Sea shells", "sells", 2, "She sel   Sea shells")]
         public void ShouldEraseLastOccuranceOfWordFromString(string text, string erase, int EraserDurability, string expectedResult)
         {
-            _pencil = new Pencil
-            {
-                Eraser = EraserDurability
-            };
-            _edit = new Edit(_pencil);
 
-            Assert.AreEqual(expectedResult, _edit.EraseWord(text, erase));
+            _pencil.Eraser = EraserDurability;
+            _writer = new Writer(_pencil);
+
+            Assert.AreEqual(expectedResult, _writer.EraseWord(text, erase));
         }
         //TO DO HERE: 
         // When a pencil is created, it can be provided with a value for eraser durability.For simplicity, all characters except
@@ -154,28 +130,20 @@ namespace PencilDurabilityTests
         [TestCase("sells", "She sells ", 100, 4)]
         public void ShouldDegradeEraserAsItDegrades(string erase, string text, int EraserDurability, int index)
         {
-             var pencil = new Pencil
-            {
-                Eraser = EraserDurability,
-                IndexOfLastRemovedWord = index
 
-             };
-            
-            _edit = new Edit(pencil);
-            _edit.EraseWord(text, erase);
-            Assert.AreEqual(EraserDurability - erase.Length, pencil.Eraser);
+            _pencil.Eraser = EraserDurability;
+            _pencil.IndexOfLastRemovedWord = index;
+            _writer = new Writer(_pencil);
+            _writer.EraseWord(text, erase);
+            Assert.AreEqual(EraserDurability - erase.Length, _pencil.Eraser);
         }
 
         [Test]
         public void EraserShouldOnlyEraseAsMuchAsItsCapableOfErasing()
         {
-            _pencil = new Pencil
-            {
-                Eraser = 2
-            };
-            _edit = new Edit(_pencil);
+            _pencil.Eraser = 2;
             var erase = "sells";
-            Assert.AreEqual("She sel   sea shells ", _edit.EraseWord(text, erase));
+            Assert.AreEqual("She sel   sea shells ", _writer.EraseWord(Text, erase));
 
         }
 
@@ -187,22 +155,21 @@ namespace PencilDurabilityTests
         [TestCase("chuck", "woodchuck c     if a woodchuck could       wood?", "woodchuck c     if a woodchuck could chuck wood?", 37)]
         public void ShouldBeAbleToEdit(string addword, string text, string ExpectedResult, int IndexInText)
         {
-            _pencil = new Pencil
-            {
-                IndexOfLastRemovedWord = IndexInText
-            };
-            _edit = new Edit(_pencil);
 
-            Assert.AreEqual(ExpectedResult, _edit.RemoveWord(text, addword));
+            _pencil.IndexOfLastRemovedWord = IndexInText;
+
+            _writer = new Writer(_pencil);
+
+            Assert.AreEqual(ExpectedResult, _writer.RemoveWord(text, addword));
         }
 
         [Test]
         [TestCase("onion", "An       a day keeps the doctor away", 3)]
         [TestCase("chuck", "woodchuck c     if a woodchuck could       wood?", 37)]
-   
+
         public void ShouldUpdatePencilToBeCorrectLastEditedIndex(string addword, string text, int ExpectedResult)
         {
-            _edit.RemoveWord(text, addword);
+            _writer.RemoveWord(text, addword);
             Assert.AreEqual(ExpectedResult, _pencil.IndexOfLastRemovedWord);
         }
 
@@ -215,12 +182,11 @@ namespace PencilDurabilityTests
         [TestCase("woodchuck c     if a woodchuck could       wood?", "Meridith", 37, "woodchuck c     if a woodchuck could Meridi@@od?")]
         public void WhenTextOverlapsFromEditingLettersAreReplacedWithATsign(string text, string replacementWord, int IndexOfLastRemovedWord, string expectedResult)
         {
-            _pencil = new Pencil
-            {
-                IndexOfLastRemovedWord = IndexOfLastRemovedWord
-            };
-            _edit = new Edit(_pencil);
-            Assert.AreEqual(expectedResult, _edit.ReplaceWord(text, replacementWord, IndexOfLastRemovedWord));
+
+            _pencil.IndexOfLastRemovedWord = IndexOfLastRemovedWord;
+
+            _writer = new Writer(_pencil);
+            Assert.AreEqual(expectedResult, _writer.ReplaceWord(text, replacementWord, IndexOfLastRemovedWord));
         }
     }
 }
